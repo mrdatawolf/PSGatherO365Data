@@ -33,6 +33,7 @@ try {
         $uriUsers = "https://graph.microsoft.com/v1.0/groups/$groupId/members"
         $groupUsers = Invoke-RestMethod -Method Get -Uri $uriUsers -Headers $headers
         $group | Add-Member -MemberType NoteProperty -Name "Users" -Value $groupUsers.value
+        $group | Add-Member -MemberType NoteProperty -Name "Client" -Value $clientName
     }
 
     # Output the list of groups and their users to a JSON file
