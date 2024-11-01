@@ -1,3 +1,6 @@
+param (
+    [string]$ClientName
+)
 . "$PSScriptRoot\coreFunctions.ps1"
 
 $scriptRoot = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
@@ -17,7 +20,11 @@ New-Directories -jsonOutputPath $jsonOutputPath -errorLogPath $logPath
 
 Initialize-TokensTable -dbPath $dbPath
 
-$clientsAndSecrets = Get-ClientsAndSecrets -dbPath $dbPath
+if ($ClientName) {
+    $clientsAndSecrets = Get-ClientsAndSecrets -dbPath $dbPath | Where-Object { $_.clientName -eq $ClientName }
+} else {
+    $clientsAndSecrets = Get-ClientsAndSecrets -dbPath $dbPath
+}
 
 foreach ($client in $clientsAndSecrets) {
     $tenantId = $client.tenantId

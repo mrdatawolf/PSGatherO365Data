@@ -1,3 +1,6 @@
+param (
+    [string]$ClientName = $null
+)
 . "$PSScriptRoot\coreFunctions.ps1"
 
 if (Check-GitInstalled) {
@@ -53,7 +56,11 @@ $jsonOutputPath = [System.Environment]::GetEnvironmentVariable('JSONOUTPUTPATH')
 
 New-Directories -jsonOutputPath $jsonOutputPath -errorLogPath $logPath
 
-$clients = Get-AllClients -dbPath $dbPath
+if ($ClientName) {
+    $clients = @($ClientName)
+} else {
+    $clients = Get-AllClients -dbPath $dbPath
+}
 
 foreach ($clientName in $clients) {
     $accessToken = Get-AccessTokenFromDB -dbPath $dbPath -clientName $clientName
@@ -74,6 +81,17 @@ foreach ($clientName in $clients) {
             $groupId = $group.id
             $uriUsers = "https://graph.microsoft.com/v1.0/groups/$groupId/members"
             $groupUsers = Invoke-RestMethod -Method Get -Uri $uriUsers -Headers $headers
+
+            foreach ($user in $groupUsers.value) {
+                if ($user.'@odata.type' -eq '#microsoft.graph.user') {
+                    $userEmail = $user.mail
+                    if (-not $userEmail) {
+                        $userEmail = "No email address found"
+                    }
+                    $user | Add-Member -MemberType NoteProperty -Name "Email" -Value $userEmail
+                }
+            }
+
             $group | Add-Member -MemberType NoteProperty -Name "Users" -Value $groupUsers.value
             $group | Add-Member -MemberType NoteProperty -Name "Client" -Value $clientName
         }
