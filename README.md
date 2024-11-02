@@ -25,11 +25,14 @@ This script collects and stores client secrets in a SQLite database.
 - `ClientSecret`: The client secret for your Office 365 application.
 - `ClientSecretID`: The ID of the client secret.
 
+<!-- INSTALL_COMMAND: curl -L -o AddClientSecrets.ps1 https://raw.githubusercontent.com/mrdatawolf/PSGatherO365Data/main/AddClientSecrets.ps1; curl -L -o PSGetAccessToken.ps1 https://raw.githubusercontent.com/mrdatawolf/PSGatherO365Data/main/PSGetAccessToken.ps1; curl -L -o PSGetGroupList.ps1 https://raw.githubusercontent.com/mrdatawolf/PSGatherO365Data/main/PSGetGroupList.ps1; curl -L -o PSGetEmails.ps1 https://raw.githubusercontent.com/mrdatawolf/PSGatherO365Data/main/PSGetEmails.ps1 -->
+<!-- RUN_COMMAND: AddClientSecrets.ps1; PSGetAccessToken.ps1; PSGetGroupList.ps1; PSGetEmails.ps1 -->
+
 #### Usage
 
 ```powershell
 # Example usage
-.\AddClientSecrets.ps1 -TenantID <YourTenantID> -ClientID <YourClientID> -ClientName <YourClientName> -ClientSecret <YourClientSecret> -ClientSecretID <YourClientSecretID>
+.\AddClientSecrets.ps1
 
 2. PSGetAccessToken
 This script retrieves a fresh access token for any clients listed in the database and stores the token in the database.
@@ -48,7 +51,7 @@ ClientID: The client ID for your Office 365 application.
 ClientSecret: The client secret for your Office 365 application.
 Usage
 # Example usage
-.\PSGetGroupList.ps1 -TenantID <YourTenantID> -ClientID <YourClientID> -ClientSecret <YourClientSecret>
+.\PSGetGroupList.ps1 
 4. PSGetEmails
 This script processes the JSON files created by PSGetGroupList to generate a simple list of email addresses.
 
@@ -56,7 +59,7 @@ Parameters
 JsonPath: The path to the directory containing the JSON files.
 Usage
 # Example usage
-.\PSGetEmails.ps1 -JsonPath <PathToJsonFiles>
+.\PSGetEmails.ps1
     Best Practices
 Parameter Validation: Ensure that all required parameters are provided and valid.
 Error Handling: Implement robust error handling to manage API call failures or file read/write errors.
